@@ -14,6 +14,6 @@ $(function() {
     "startDate": "01/31/2018",
     "endDate": "02/06/2018"
 	}, function(start, end, label) {
-	  console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+	  console.log("New date range selected: " + start.format('YYYY-MM-DD') + " to " + end.format('YYYY-MM-DD') + " (predefined range: " + label + ")");
 	});
 });
