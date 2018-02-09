@@ -25,22 +25,22 @@ app.post('/', function(req, res) {
  	getFlights(req.body);
 });
 
-var url = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?apikey=GrBn3mBuHGEGD1Xr1xf9vlzBpo7AHSLD"
-
-var urlOne;
-var originOne;
-var destinationsOne;
-
-var urlTwo;
-var originTwo;
-var destinationsTwo;
-
-var destination;
-var dates;
-var duration;
-var maxPrice;
-
 function getFlights(postData){
+	var url = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?apikey=GrBn3mBuHGEGD1Xr1xf9vlzBpo7AHSLD"
+
+	var urlOne;
+	var originOne;
+	var destinationsOne;
+
+	var urlTwo;
+	var originTwo;
+	var destinationsTwo;
+
+	var destination;
+	var dates;
+	var duration;
+	var maxPrice;
+
 	originOne = postData.originOne;
 	originTwo = postData.originTwo;
 	destination = postData.destination;
@@ -78,32 +78,35 @@ function getFlights(postData){
 	
 	request.get(urlOne, function(err, res, body){
 		if (err){} //TODO: handle error
-		if (res.statusCode !== 200) {}
+		if (res.statusCode !== 200) {
+			fligtRes.sendFile( path.join( __dirname, 'public', 'flights.html' ));
+		}
 		else {
 			destinationsOne = JSON.parse(body);
 			if (destinationsOne && destinationsTwo) {
-				sortFlights(destinationsOne, destinationsTwo);
+				sortFlights(destinationsOne, destinationsTwo, originOne, originTwo);
 			}
 		}
 	});
 
 	request.get(urlTwo, function(err, res, body){
 		if (err){} //TODO: handle error
-		if (res.statusCode !== 200) {}
+		if (res.statusCode !== 200) {
+			fligtRes.sendFile( path.join( __dirname, 'public', 'flights.html' ));
+		}
 		else {
 			destinationsTwo = JSON.parse(body);
 			if (destinationsOne && destinationsTwo) {
-				sortFlights(destinationsOne, destinationsTwo);
+				sortFlights(destinationsOne, destinationsTwo, originOne, originTwo);
 			}
 		}
 	});
 };
-var buf = '<div> <p> These are the result that we found </p> </div>';
-function sortFlights(destinationsOne, destinationsTwo){
-	console.log("We have destinations");
-	console.log("destinationsOne : " + destinationsOne);
-	console.log("destinationsTwo : " + destinationsTwo);
 
+
+function sortFlights(destinationsOne, destinationsTwo, originOne, originTwo){
+var buf = '<div> <p> These are the result that we found </p> </div>';
+	console.log("We have destinations");
 	for (var i = destinationsOne.results.length - 1; i >= 0; i--) {
 		for (var e = destinationsTwo.results.length - 1; e >= 0; e--) {
 			if (destinationsOne.results[i].destination == destinationsTwo.results[e].destination) {
@@ -116,7 +119,7 @@ function sortFlights(destinationsOne, destinationsTwo){
 	}
 	console.log("I RAN");
 	if (fligtRes.statusCode === 200) {
-        fligtRes.write('<html><body><p>' + buf + '</p></body></html>');
+        fligtRes.write('<html><body><input type="button" value="Refresh Page" onClick="window.location.href=window.location.href"><p>' + buf + '</p></body></html>');
         fligtRes.end();
 		//fligtRes.sendFile( path.join( __dirname, 'public', 'flights.html' ));
 	}
