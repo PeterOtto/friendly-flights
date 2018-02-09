@@ -53,3 +53,19 @@ hr {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
+
+.jumbotron {
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+.display-6{
+	padding: 1em 2em 0em 2em;
+}
+
+#searchModal{
+	display: none;
+}

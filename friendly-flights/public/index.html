@@ -88,9 +88,9 @@
 			    <div class="col">
 			    	<h4>Origin #2</h4>
 	                <div class="input-group">
-	                	<input type="text" id="originTwo" name="originTwo" class="form-control" placeholder="Disabled for now" disabled>
+	                	<input type="text" id="originTwo" name="originTwo" class="form-control">
 					 	<div class="input-group-append fa-4x">
-					    	<span class="input-group-text" id="basic-addon2"><i class="fas fa-plane" data-fa-transform="rotate-180"></i></span>
+					    	<span class="input-group-text" id="basic-addon2"><i class="fas fa-plane fa-rotate-180"></i></span>
 					  	</div>
 					</div>
 			    </div>
@@ -135,12 +135,19 @@
 				<div class="col">
 				</div>
 				<div class="col">
-					<button type="submit" class="btn btn-block btn-outline-success">Find flights</button>
+					<button type="submit" class="btn btn-block btn-outline-success" onclick="search()">Find flights</button>
 				</div>
 				<div class="col">
 				</div>
 			</div>
 		</form>
+
+		<div class="jumbotron jumbotron-fluid" id="searchModal">
+		  <div class="container">
+		    <h1 class="display-4"><i class="far fa-compass fa-spin fa-3x"></i></h1>
+		    <h1 class="display-6">Looking for flights <br> for you and your friend</h1>
+		  </div>
+		</div>
     </div> <!-- /container -->
 
 	
