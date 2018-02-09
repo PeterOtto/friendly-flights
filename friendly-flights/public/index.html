@@ -60,6 +60,8 @@
     	<div class="row">
     		<div class="col">
     			<h1>Welcome to Friendly flights</h1>
+    			<h5>This is a very early and rough prototype, it uses a free api, from <a href="https://sandbox.amadeus.com/"> amadeus </a>, to look for flights which means that not all destinations are supported</h5>
+    			<h5>It also only support IATA codes for the destinations. Here is <a href="https://github.com/amadeus-travel-innovation-sandbox/sandbox-content/blob/master/flight-search-cache-origin-destination.csv">a list of the currently supported origin-destination IATA location pairs</a></h5>
     		</div>
     	</div>
 
@@ -68,7 +70,7 @@
 			    <div class="col">
 			    	<h4>Origin #1</h4>
 	                <div class="input-group">
-	                	<input type="text" id="originOne" name="originOne" class="form-control">
+	                	<input type="text" id="originOne" name="originOne" class="form-control" placeholder="Required">
 					 	<div class="input-group-append">
 					    	<span class="input-group-text" id="basic-addon2"><i class="fas fa-plane"></i></span>
 					  	</div>
@@ -88,7 +90,7 @@
 			    <div class="col">
 			    	<h4>Origin #2</h4>
 	                <div class="input-group">
-	                	<input type="text" id="originTwo" name="originTwo" class="form-control">
+	                	<input type="text" id="originTwo" name="originTwo" class="form-control" placeholder="Required">
 					 	<div class="input-group-append fa-4x">
 					    	<span class="input-group-text" id="basic-addon2"><i class="fas fa-plane fa-rotate-180"></i></span>
 					  	</div>
@@ -112,7 +114,7 @@
 			    <div class="col">
 			    	<h4>Duration</h4>
 	                <div class="input-group">
-	                	<input type="number" id="duration" name="duration" class="form-control" min="1">
+	                	<input type="number" id="duration" name="duration" class="form-control" min="1" placeholder="Required">
 					 	<div class="input-group-append">
 					    	<span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span>
 					  	</div>
