@@ -100,7 +100,10 @@ function getFlights(postData){
 };
 var buf = '<div> <p> These are the result that we found </p> </div>';
 function sortFlights(destinationsOne, destinationsTwo){
-	
+	console.log("We have destinations");
+	console.log("destinationsOne : " + destinationsOne);
+	console.log("destinationsTwo : " + destinationsTwo);
+
 	for (var i = destinationsOne.results.length - 1; i >= 0; i--) {
 		for (var e = destinationsTwo.results.length - 1; e >= 0; e--) {
 			if (destinationsOne.results[i].destination == destinationsTwo.results[e].destination) {
