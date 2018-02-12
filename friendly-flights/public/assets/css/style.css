@@ -63,3 +63,7 @@ hr {
 #searchModal{
 	display: none;
 }
+
+.card {
+    margin-bottom: 30px;
+}

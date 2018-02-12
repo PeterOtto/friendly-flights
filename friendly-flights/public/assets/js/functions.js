@@ -27,3 +27,26 @@ $(function() {
 function search(){
 	document.getElementById("searchModal").style.display = "block";
 }
+
+/*
+$(function() {
+    function displayResult(item) {
+        //formData.set(originOne, item.iata);
+    }
+    $('#originOne').typeahead({
+        source: [
+            {iata: "YYZ", name: 'Toronto'},
+            {iata: 2, name: 'Montreal'},
+            {iata: 3, name: 'New York'},
+            {iata: 4, name: 'Buffalo'},
+            {iata: 5, name: 'Boston'},
+            {iata: 6, name: 'Columbus'},
+            {iata: 7, name: 'Dallas'},
+            {iata: 8, name: 'Vancouver'},
+            {iata: 9, name: 'Seattle'},
+            {iata: 10, name: 'Los Angeles'}
+        ],
+        onSelect: displayResult
+    });
+});
+*/

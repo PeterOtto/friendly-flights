@@ -1,6 +1,12 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var request = require('request')
+var express = require('express');
+var bodyParser = require('body-parser');
+var request = require('request');
+var fs = require('file-system');
+var mustache = require('mustache');
+var airportsJSON = require('./data/airports.json');
+var Backbone = require('backbone');
+
+var airports = new Backbone.Collection(airportsJSON);
 
 var app = express();
 app.use( express.static( __dirname + '/public' ));
@@ -24,6 +30,8 @@ app.post('/', function(req, res) {
  	// sending a response does not pause the function
  	getFlights(req.body);
 });
+
+var destinations = [];
 
 function getFlights(postData){
 	var url = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search?apikey=GrBn3mBuHGEGD1Xr1xf9vlzBpo7AHSLD"
@@ -79,7 +87,7 @@ function getFlights(postData){
 	request.get(urlOne, function(err, res, body){
 		if (err){} //TODO: handle error
 		if (res.statusCode !== 200) {
-			fligtRes.sendFile( path.join( __dirname, 'public', 'flights.html' ));
+			fligtRes.sendFile( path.join( __dirname, 'public', 'noflights.html' ));
 		}
 		else {
 			destinationsOne = JSON.parse(body);
@@ -92,7 +100,7 @@ function getFlights(postData){
 	request.get(urlTwo, function(err, res, body){
 		if (err){} //TODO: handle error
 		if (res.statusCode !== 200) {
-			fligtRes.sendFile( path.join( __dirname, 'public', 'flights.html' ));
+			fligtRes.sendFile( path.join( __dirname, 'public', 'noflights.html' ));
 		}
 		else {
 			destinationsTwo = JSON.parse(body);
@@ -103,24 +111,51 @@ function getFlights(postData){
 	});
 };
 
-
 function sortFlights(destinationsOne, destinationsTwo, originOne, originTwo){
-var buf = '<div> <p> These are the result that we found </p> </div>';
-	console.log("We have destinations");
+
 	for (var i = destinationsOne.results.length - 1; i >= 0; i--) {
 		for (var e = destinationsTwo.results.length - 1; e >= 0; e--) {
 			if (destinationsOne.results[i].destination == destinationsTwo.results[e].destination) {
 				if (destinationsOne.results[i].departure_date == destinationsTwo.results[e].departure_date) {
-					var tmp = '<ul><li> Destination : ' + destinationsOne.results[i].destination + '</li><li>Departure date : ' + destinationsOne.results[i].departure_date + '</li><li>Return date : ' + destinationsOne.results[i].return_date + '</li><li>From ' + originOne + ' : ' + destinationsOne.results[i].price + ' ' + destinationsOne.currency + '</li><li>From ' + originTwo + ' : ' + destinationsTwo.results[e].price + ' ' + destinationsTwo.currency + '</li></ul>';
-					buf += tmp;
+					
+					//var city = airports.findWhere({ iata: destinationsOne.results[i].destination }).get('city');
+					console.log(destinationsOne.results[i].destination);
+					var city = airports.findWhere({ iata: destinationsOne.results[i].destination});
+					if (city === undefined) {
+						city = destinationsOne.results[i].destination + " - All Airports";
+						var country = "Country unknown";
+						console.log("this is not a place we know");
+					} else {
+						city = airports.findWhere({ iata: destinationsOne.results[i].destination }).get('city')
+						var country = airports.findWhere({ iata: destinationsOne.results[i].destination }).get('country')
+					}
+			
+					
+					var objToAdd = {
+						"Destination" : city,
+						"country" : country,
+						"DepartureDate" : destinationsOne.results[i].departure_date,
+						"ReturnDate" : destinationsOne.results[i].return_date,
+						"originOne" : originOne,
+						"originOnePrice" : destinationsOne.results[i].price,
+						"originOneCurrency" : destinationsOne.currency,
+						"originTwo" : originTwo,
+						"originTwoPrice" : destinationsTwo.results[e].price,
+						"originTwoCurrency" : destinationsTwo.currency,
+					};
+					destinations.push(objToAdd);
 				}
 			}
 		}
 	}
-	console.log("I RAN");
 	if (fligtRes.statusCode === 200) {
-        fligtRes.write('<html><body><input type="button" value="Refresh Page" onClick="window.location.href=window.location.href"><p>' + buf + '</p></body></html>');
-        fligtRes.end();
-		//fligtRes.sendFile( path.join( __dirname, 'public', 'flights.html' ));
+		var destinationsObj = {"destinations" : destinations};
+		
+		fs.readFile("public/template.html", function (err, data) {
+		  if (err) throw err;
+		  var output = mustache.render(data.toString(), destinationsObj);
+		  fligtRes.write(output);
+		  fligtRes.end();
+		});
 	}
 }
