@@ -49,8 +49,10 @@ function getFlights(postData){
 	var duration;
 	var maxPrice;
 
-	originOne = postData.originOne;
-	originTwo = postData.originTwo;
+	originOne = postData.originOneIata;
+	originTwo = postData.originTwoIata;
+	originOneCity = postData.originOne;
+	originTwoCity = postData.originTwo;
 	destination = postData.destination;
 	dates = postData.daterange;
 	duration = postData.duration;
@@ -74,6 +76,8 @@ function getFlights(postData){
 		url += "&duration="+duration;
 	}
 
+	console.log("originOne : " + originOne + " originTwo : " + originTwo);
+
 	if (originOne !== "undefined") {
 		urlOne = url;
 		urlOne  += "&origin="+originOne;
@@ -92,7 +96,7 @@ function getFlights(postData){
 		else {
 			destinationsOne = JSON.parse(body);
 			if (destinationsOne && destinationsTwo) {
-				sortFlights(destinationsOne, destinationsTwo, originOne, originTwo);
+				sortFlights(destinationsOne, destinationsTwo, originOneCity, originTwoCity);
 			}
 		}
 	});
@@ -105,7 +109,7 @@ function getFlights(postData){
 		else {
 			destinationsTwo = JSON.parse(body);
 			if (destinationsOne && destinationsTwo) {
-				sortFlights(destinationsOne, destinationsTwo, originOne, originTwo);
+				sortFlights(destinationsOne, destinationsTwo, originOneCity, originTwoCity);
 			}
 		}
 	});
@@ -118,8 +122,6 @@ function sortFlights(destinationsOne, destinationsTwo, originOne, originTwo){
 			if (destinationsOne.results[i].destination == destinationsTwo.results[e].destination) {
 				if (destinationsOne.results[i].departure_date == destinationsTwo.results[e].departure_date) {
 					
-					//var city = airports.findWhere({ iata: destinationsOne.results[i].destination }).get('city');
-					console.log(destinationsOne.results[i].destination);
 					var city = airports.findWhere({ iata: destinationsOne.results[i].destination});
 					if (city === undefined) {
 						city = destinationsOne.results[i].destination + " - All Airports";
